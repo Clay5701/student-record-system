@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 #include "../include/student.h"
 #include "../include/fileio.h"
 
@@ -22,6 +23,15 @@ void add_students() {
 
 	std::cout << "Enter number of students to enter: " << std::endl;
 	std::cin >> count;
+
+	while (std::cin.fail() || count <= 0) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << std::endl;
+		std::cout << "Please enter a valid number of students: " << std::endl;
+		std::cin >> count;
+	}
+
 	std::cout << std::endl;
 
 	std::vector<Student> students(count);
@@ -84,6 +94,7 @@ void list_students() {
 	char sort_flag;
 	std::cout << "Would you like to sort the students by grade? (y or n): " << std::endl;
 	std::cin >> sort_flag;
+	std::cout << std::endl;
 
 	if (sort_flag == 'y' || sort_flag == 'Y') {
 		sort_students(students);
