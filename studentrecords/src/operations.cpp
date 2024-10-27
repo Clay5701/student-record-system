@@ -18,7 +18,7 @@ void sort_students(std::vector<Student>& students) {
 	}
 }
 
-void add_students() {
+void add_students(std::vector<Student>& students) {
 	int count;
 
 	std::cout << "Enter number of students to enter: " << std::endl;
@@ -34,22 +34,22 @@ void add_students() {
 
 	std::cout << std::endl;
 
-	std::vector<Student> students(count);
-
 	for (int i = 0; i < count; i++) {
 		std::string name;
 		int age;
 		char grade;
 
+		Student student;
+
 		std::cout << "Enter the name of student " << i + 1 << ':' << std::endl;
 		std::getline(std::cin >> std::ws, name);
 		std::cout << std::endl;
-		students[i].set_name(name);
+		student.set_name(name);
 
 		std::cout << "Enter the age of student " << i + 1 << ':' << std::endl;
 		std::cin >> age;
 		std::cout << std::endl;
-		students[i].set_age(age);
+		student.set_age(age);
 
 		std::cout << "Enter the grade of student " << i + 1 << ':' << std::endl;
 		std::cin >> grade;
@@ -61,35 +61,35 @@ void add_students() {
 		}
 
 		std::cout << std::endl;
-		students[i].set_grade(grade);
+		student.set_grade(grade);
+
+		students.push_back(student);
 	}
 
-	save_students(filename, students);
-
-	for (const Student& student : students) {
-		std::cout << "Student: " << student.get_name()
-			<< ", Age: " << student.get_age()
-			<< ", Grade: " << student.get_grade() << std::endl;
-	}
+	std::cout << "Student(s) were successfully added." << std::endl;
 }
 
-void rmv_student() {
+void rmv_student(std::vector<Student>& students) {
 	std::string name;
 	std::cout << "Enter the name of the student to remove: " << std::endl;
 	std::getline(std::cin >> std::ws, name);
 
-	remove(filename, name);
+	auto student = students.begin();
+	while (student != students.end()) {
+		if (student->get_name() == name) {
+			student = students.erase(student);
+		}
+		else {
+			student++;
+		}
+	}
 }
 
-void list_students() {
+void list_students(std::vector<Student>& students) {
 	std::string name;
 	std::cout << "Enter the name of the student (Enter '*' for all students): " << std::endl;
 	std::getline(std::cin >> std::ws, name);
 	std::cout << std::endl;
-
-	std::vector<Student> students;
-
-	load_students(filename, students, name);
 
 	char sort_flag;
 	std::cout << "Would you like to sort the students by grade? (y or n): " << std::endl;
@@ -101,9 +101,12 @@ void list_students() {
 	}
 
 
-	for (const Student& student : students) {
-		std::cout << "Student: " << student.get_name()
-			<< ", Age: " << student.get_age()
-			<< ", Grade: " << student.get_grade() << std::endl;
+	for (Student& student : students) {
+		if (name == "*" || student.get_name() == name) {
+			std::cout << "Student: " << student.get_name()
+				<< ", Age: " << student.get_age()
+				<< ", Grade: " << student.get_grade() << std::endl;
+		}
+		else continue;
 	}
 }

@@ -1,12 +1,16 @@
 #include <iostream>
+#include <vector>
 #include <string>
 #include "../include/student.h"
 #include "../include/fileio.h"
 #include "../include/operations.h"
 
 int main() {
+	std::vector<Student> students;
 	bool loopcon = true;
 	int selection;
+
+	get_students(students);
 
 	std::cout << "************STUDENT RECORD SYSTEM************" << std::endl;
 	while(loopcon) {
@@ -20,17 +24,17 @@ int main() {
 
 		switch (selection) {
 		case 1:
-			add_students();
+			add_students(students);
 			std::cout << std::endl;
 			break;
 
 		case 2:
-			rmv_student();
+			rmv_student(students);
 			std::cout << std::endl;
 			break;
 
 		case 3:
-			list_students();
+			list_students(students);
 			std::cout << std::endl;
 			break;
 
@@ -45,4 +49,5 @@ int main() {
 			break;
 		}
 	}
+	save_students(students);
 }
